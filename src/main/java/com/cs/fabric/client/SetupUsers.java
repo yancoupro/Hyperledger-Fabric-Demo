@@ -20,7 +20,12 @@ public class SetupUsers {
 	private static final ClientHelper clientHelper = new ClientHelper();
 	private static final ClientConfig clientConfig = ClientConfig.getConfig();
 	private static final String TEST_ADMIN_NAME = "admin";
-	private static final String TESTUSER_1_NAME = "user1";
+	//private static final String TESTUSER_1_NAME = "maal";
+    //private static final String TESTUSER_1_NAME = "matt";
+    //private static final String TESTUSER_1_NAME = "frank";
+    //private static final String TESTUSER_1_NAME = "rick";
+    //private static final String TESTUSER_1_NAME = "mart";
+    private static final String TESTUSER_1_NAME = "max";
 
 	private static final Log logger = LogFactory.getLog(SetupUsers.class);
 
@@ -30,8 +35,10 @@ public class SetupUsers {
 		configHelper.clearConfig();
 		configHelper.customizeConfig();
 
+		System.out.println("working on : " + args[0]);
+
 		// Get Org1
-		SampleOrg sampleOrg = clientConfig.getIntegrationTestsSampleOrg("peerOrg1");
+		SampleOrg sampleOrg = clientConfig.getIntegrationTestsSampleOrg(args[0]);
 		sampleOrg.setCAClient(HFCAClient.createNewInstance(sampleOrg.getCALocation(), sampleOrg.getCAProperties()));
 
 		////////////////////////////
@@ -71,7 +78,8 @@ public class SetupUsers {
 
 		SampleUser user = sampleStore.getMember(TESTUSER_1_NAME, sampleOrg.getName());
 		if (!user.isRegistered()) { // users need to be registered AND enrolled
-			RegistrationRequest rr = new RegistrationRequest(user.getName(), "org1.department1");
+			//RegistrationRequest rr = new RegistrationRequest(user.getName(), args[0].toLowerCase() + ".department1");
+            RegistrationRequest rr = new RegistrationRequest(user.getName(), "atq.it");
 			user.setEnrollmentSecret(ca.register(rr, admin));
 		}
 		if (!user.isEnrolled()) {

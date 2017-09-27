@@ -49,13 +49,14 @@ public class ClientHelper {
 		File sampleStoreFile = new File(System.getProperty("java.io.tmpdir") + "/HFCSampletest.properties");
 		SampleStore sampleStore = new SampleStore(sampleStoreFile);
 
+		String sampleOrgName = "peerOrgAtq";
 		// Get Org1 from configuration
-		SampleOrg sampleOrg = clientConfig.getIntegrationTestsSampleOrg("peerOrg1");
-		logger.info("Get peerOrg1 SampleOrg");
+		SampleOrg sampleOrg = clientConfig.getIntegrationTestsSampleOrg(sampleOrgName);
+		logger.info("Get "+sampleOrgName+" SampleOrg");
 
 		// Set up HFCA for Org1
 		sampleOrg.setCAClient(HFCAClient.createNewInstance(sampleOrg.getCALocation(), sampleOrg.getCAProperties()));
-		logger.info("Set CA Client of peerOrg1 SampleOrg");
+		logger.info("Set CA Client of "+ sampleOrgName + " SampleOrg");
 
 		sampleOrg.setAdmin(sampleStore.getMember(TEST_ADMIN_NAME, sampleOrg.getName())); // The
 																							// admin
@@ -76,6 +77,7 @@ public class ClientHelper {
 		final String sampleOrgName = sampleOrg.getName();
 		final String sampleOrgDomainName = sampleOrg.getDomainName();
 
+		//System.out.println(clientConfig.getTestChannlePath() + " / " + sampleOrgDomainName + " / " + sampleOrgName);
 		SampleUser peerOrgAdmin = sampleStore.getMember(sampleOrgName + "Admin", sampleOrgName, sampleOrg.getMSPID(),
 				findFile_sk(Paths.get(clientConfig.getTestChannlePath(), "crypto-config/peerOrganizations/",
 						sampleOrgDomainName, format("/users/Admin@%s/msp/keystore", sampleOrgDomainName)).toFile()),
@@ -84,7 +86,7 @@ public class ClientHelper {
 								sampleOrgDomainName))
 						.toFile());
 
-		sampleOrg.setPeerAdmin(peerOrgAdmin); // A special user that can crate
+		sampleOrg.setPeerAdmin(peerOrgAdmin); // A special user that can create
 												// channels, join peers and
 												// install chain code
 												// and jump tall blockchains in
