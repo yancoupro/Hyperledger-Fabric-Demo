@@ -34,10 +34,13 @@ public class ClientHelper {
 
 	private static final String TEST_ADMIN_NAME = "admin";
 	private static final String TESTUSER_1_NAME = "user1";
-	private static final String FOO_CHANNEL_NAME = "foo";
-	private static final String CHAIN_CODE_NAME = "trade_finance_go";
-	private static final String CHAIN_CODE_PATH = "github.com/trade_finance";
-	private static final String CHAIN_CODE_VERSION = "1";
+	//private static final String FOO_CHANNEL_NAME = "foo";
+	//private static final String CHAIN_CODE_NAME = "trade_finance_go";
+	//private static final String CHAIN_CODE_PATH = "github.com/trade_finance";
+	private static final String FOO_CHANNEL_NAME = "public";
+	private static final String CHAIN_CODE_NAME = "public_chaincode";
+	private static final String CHAIN_CODE_PATH = "queblock/public_chaincode";
+	public static final String CHAIN_CODE_VERSION = "6";
 	private static final ClientConfig clientConfig = ClientConfig.getConfig();
 
 	private static final Log logger = LogFactory.getLog(ClientHelper.class);

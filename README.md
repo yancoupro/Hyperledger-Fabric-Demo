@@ -19,3 +19,14 @@ com.cs.fabric.client.DeployChaincode.main
 
 ## test workflow
 inspect, ship, present, arrival, payment
+
+#ATQ
+
+## create channel transaction
+export CHANNEL_NAME=public
+
+`cd /home/devops2/java/atiServer/queblock/external/yancoupro-Fabric-Demo-Base/src/test/fixture/sdkintegration/e2e-2Orgs/channel`
+configtxgen -profile TwoOrgsChannel -outputCreateChannelTx .//public.tx -channelID $CHANNEL_NAME
+
+## run main with pub channel option
+

@@ -73,7 +73,17 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.cs.fabric.client.Shipping</mainClass>
+					<mainClass>com.cs.fabric.Main</mainClass>
+					<systemProperties>
+						<systemProperty>
+							<key>log4j.configuration</key>
+							<value>file:///home/devops2/java/atiServer/queblock/external/yancoupro-Fabric-Demo-Base/src/main/java/log4j.properties</value>
+						</systemProperty>
+						<systemProperty>
+							<key>log4j.debug</key>
+							<value>false</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
