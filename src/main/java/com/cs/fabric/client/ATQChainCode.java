@@ -84,7 +84,7 @@ public class ATQChainCode {
 		transactionProposalRequest.setTransientMap(tm2);
 
 		logger.info(
-				"sending transactionProposal to all peers with arguments inspect(IMLC-000001,Chinasystem,China Ocean Shipping Company)");
+				"sending transactionProposal to all peers ");
 
 		Collection<ProposalResponse> transactionPropResp = channel.sendTransactionProposal(transactionProposalRequest,
 				channel.getPeers());
@@ -131,7 +131,7 @@ public class ATQChainCode {
 		////////////////////////////
 		// Send Transaction Transaction to orderer
 		logger.info(
-				"Sending chain code transaction(inspect(IMLC-000001,Chinasystem,China Ocean Shipping Company)) to orderer.");
+				"Sending chain code transaction("+args.toString()+") to orderer.");
 		logger.info("sending transaction proposal to orderer");
 		channel.sendTransaction(successful).thenApply(transactionEvent -> {
 			if (transactionEvent.isValid()) {
