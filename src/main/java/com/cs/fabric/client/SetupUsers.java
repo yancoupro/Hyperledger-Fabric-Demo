@@ -85,6 +85,7 @@ public class SetupUsers {
 		logger.info("Set peer admin");
 
 		logger.info("Set up users for Org1. OK!");
+		System.out.println("Set up users for Org1. OK!");
 	}
 
 }
