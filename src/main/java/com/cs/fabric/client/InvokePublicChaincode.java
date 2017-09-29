@@ -14,14 +14,14 @@ import java.util.concurrent.TimeoutException;
 
 public class InvokePublicChaincode {
 
-	public static void main(String[] args) throws CryptoException, InvalidArgumentException, NoSuchAlgorithmException,
+	public static String main(String[] args) throws CryptoException, InvalidArgumentException, NoSuchAlgorithmException,
 			NoSuchProviderException, InvalidKeySpecException, TransactionException, IOException {
 
 
 		ATQChainCode invokeChainCode = new ATQChainCode(args);
 
 		try {
-			invokeChainCode.invoke();
+			return invokeChainCode.invoke();
 		} catch (InvalidArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,6 +41,8 @@ public class InvokePublicChaincode {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return "";
 
 	}
 }

@@ -47,7 +47,7 @@ public class ATQChainCode {
 		this.client.setUserContext(sampleOrg.getPeerAdmin()); // Maybe a bug of 1.0.0beta, only peer admin can call chaincode?
 	}
 
-	public void invoke() throws InvalidArgumentException, ProposalException, InvalidProtocolBufferException,
+	public String invoke() throws InvalidArgumentException, ProposalException, InvalidProtocolBufferException,
 			UnsupportedEncodingException, InterruptedException, ExecutionException, TimeoutException {
 
 		Collection<ProposalResponse> successful = new LinkedList<>();
@@ -144,6 +144,7 @@ public class ATQChainCode {
 			return transactionEvent.getTransactionID();
 		}).get(clientConfig.getTransactionWaitTime(), TimeUnit.SECONDS);
 
+		return resultAsString;
 	}
 
 	public void queryByRefNo() throws InvalidArgumentException, ProposalException {

@@ -7,21 +7,55 @@ import com.cs.fabric.client.InvokePublicChaincode;
 import com.cs.fabric.client.PublicChannel;
 import com.cs.fabric.client.SetupUsers;
 
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+
+import java.io.IOException;
+import java.net.URI;
+
+
 import com.cs.fabric.client.utils.ClientHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
 
-import java.io.IOException;
 
 /**
  * Main class.
  *
  */
 public class Main {
+    // Base URI the Grizzly HTTP server will listen on
+    public static final String BASE_URI = "http://0.0.0.0:8080/myapp/";
 
-    private static final Log logger = LogFactory.getLog(Main.class);
+    /**
+     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     * @return Grizzly HTTP server.
+     */
+    public static HttpServer startServer() {
+        // create a resource config that scans for JAX-RS resources and providers
+        // in atq.queblock package
+        final ResourceConfig rc = new ResourceConfig().packages("com.cs.fabric.rest");
+
+        // create and start a new instance of grizzly http server
+        // exposing the Jersey application at BASE_URI
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+    }
+
+    /**
+     * Main method.
+     * @param args
+     * @throws IOException
+     */
+    public static void startServer(String[] args) throws IOException {
+        final HttpServer server = startServer();
+        System.out.println(String.format("Jersey app started with WADL available at "
+                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        System.in.read();
+        server.stop();
+    }
+
+    public static final Log logger = LogFactory.getLog(Main.class);
 
     /**
      * Main method.
@@ -54,6 +88,9 @@ public class Main {
             chan.main(ctxArgs);
         }
 
+        if(args[0].equals("server")) {
+            startServer(args);
+        }
 
         if(args[0].equals("deploy")) {
             logger.info("deploy of public cc version " + ClientHelper.CHAIN_CODE_VERSION);
