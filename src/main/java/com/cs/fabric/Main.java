@@ -1,7 +1,6 @@
 package com.cs.fabric;
 
 
-
 import com.cs.fabric.client.DeployPublicChaincode;
 import com.cs.fabric.client.InvokePublicChaincode;
 import com.cs.fabric.client.PublicChannel;
@@ -22,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Main class.
- *
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
@@ -30,6 +28,7 @@ public class Main {
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     *
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
@@ -44,6 +43,7 @@ public class Main {
 
     /**
      * Main method.
+     *
      * @param args
      * @throws IOException
      */
@@ -59,13 +59,14 @@ public class Main {
 
     /**
      * Main method.
+     *
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws Exception {
 
         System.out.println("FAPP");
-        for(int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             System.out.println(args[i]);
         }
 
@@ -73,14 +74,14 @@ public class Main {
         String[] emptyArgs = {};
         logger.info("main is started");
 
-        if(0 == 1) {
+        if (args[0].equals("create_users") || args[0].equals("init")) {
 
             SetupUsers setup = new SetupUsers();
             setup.main(ctxArgs);
         }
 
 
-        if(0 == 1) {
+        if (args[0].equals("create_channel") || args[0].equals("init")) {
             logger.info("creating public channel");
 
             //create channel public
@@ -88,30 +89,30 @@ public class Main {
             chan.main(ctxArgs);
         }
 
-        if(args[0].equals("server")) {
-            startServer(args);
-        }
-
-        if(args[0].equals("deploy")) {
+        if (args[0].equals("deploy_chaincode") || args[0].equals("init")) {
             logger.info("deploy of public cc version " + ClientHelper.CHAIN_CODE_VERSION);
             DeployPublicChaincode publicChaincode = new DeployPublicChaincode();
             publicChaincode.main(ctxArgs);
 
         }
 
-        if (args[0].equals("invoke") || args[0].equals("read")){
+
+        if (args[0].equals("server")) {
+            startServer(args);
+        }
+
+        if (args[0].equals("invoke") || args[0].equals("read")) {
             logger.info("invoking chaincode : " + args[0]);
 
-            if(args[0].equals("invoke")) {
+            if (args[0].equals("invoke")) {
                 //   0       1       2			  3             4              5         6    7
                 //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-                ctxArgs  = new String[] { "initAnimal", "124000100005", "3", "Longueuil",
-                        "kitchen", "SlaughterHouse", "2017-09-28" };
-            }
-            else {
+                ctxArgs = new String[]{"initAnimal", "124000100005", "3", "Longueuil",
+                        "kitchen", "SlaughterHouse", "2017-09-28"};
+            } else {
                 //   0       1       2			  3             4              5         6    7
                 //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-                ctxArgs  = new String[] { "readAnimal", "124000100005" };
+                ctxArgs = new String[]{"readAnimal", "124000100005"};
 
             }
 
