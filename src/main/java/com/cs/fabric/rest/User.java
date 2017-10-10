@@ -8,13 +8,18 @@ import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Calendar;
+import java.util.Date;
 
 //import org.hyperledger.fabric.protos.common.Common;
 //import org.hyperledger.fabric.protos.orderer.Ab;
@@ -26,8 +31,8 @@ import java.util.Enumeration;
 /**
  * Root resource (exposed at "contract" path)
  */
-@Path("/animal")
-public class Animal {
+@Path("/user")
+public class User extends Common{
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -40,26 +45,8 @@ public class Animal {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIt(@PathParam("identifier") String identifier) throws InvalidArgumentException {
 
-        String[] ctxArgs = new String[]{"readAnimal", identifier};
-        String txResult = "";
-
-        InvokePublicChaincode icc = new InvokePublicChaincode();
-        try {
-            txResult = icc.main(ctxArgs);
-        } catch (CryptoException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (TransactionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Response.status(200).entity(txResult).build();
+        String[] ctxArgs = new String[]{"art", "qGetUser", identifier};
+        return this.getFromCC(ctxArgs);
     }
 
     @POST
@@ -69,55 +56,40 @@ public class Animal {
         StringBuilder s = new StringBuilder();
         s.append("SET IT INITIATED");
 
-        //   0       1       2			  3             4              5         6    7
-        //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-        String[] ctxArgs = new String[]{"initAnimal",
-                map.getFirst("animalId"),
-                map.getFirst("ageInMonths"),
-                map.getFirst("placeOfBirth"),
-                map.getFirst("placeOfFeeding"),
-                map.getFirst("placeOfSlaughter"),
-                map.getFirst("DateOfSlaughter")
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String creationDate = df.format(today);
+
+        // ./peer chaincode invoke -l golang -n mycc -c '
+        // "Function": "PostUser",
+        // "Args":[
+        //0 "100",
+        //1 "USER",
+        //2 "Ashley Hart",
+        //3 "TRD",
+        //4 "Morrisville Parkway,  #216,  Morrisville,  NC 27560",
+        // "9198063535",
+        // "ashley@itpeople.com",
+        // "SUNTRUST",
+        // "00017102345",
+        //9 "0234678"]'
+
+        String[] ctxArgs = new String[]{"art", "iPostUser",
+                map.getFirst("userId"),
+                map.getFirst("objectType"),
+                map.getFirst("name"),
+                map.getFirst("role"),
+                map.getFirst("address"),
+                map.getFirst("phone"),
+                map.getFirst("email"),
+                map.getFirst("bank"),
+                map.getFirst("account"),
+                map.getFirst("routing"),
+                creationDate
         };
 
         Main.logger.info("args to cc" + Arrays.toString(ctxArgs));
-        try {
-
-            Main.logger.info("POST Parameters:");
-
-
-//            MultivaluedMap<String, String> map = ui.get();
-
-            for (String key : map.keySet()) {
-                Main.logger.info("Key: " + key);
-                Main.logger.info("Val: " + map.getFirst(key));
-                s.append("Key: " + key);
-                s.append("Val: " + map.getFirst(key));
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build().toString();
-        }
-        String txResult = "";
-
-        InvokePublicChaincode icc = new InvokePublicChaincode();
-        try {
-            txResult = icc.main(ctxArgs);
-        } catch (CryptoException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (TransactionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Got it!" + "xx" + "\n" + txResult;
+        this.logPost(map);
+        return this.setToCC(ctxArgs);
     }
 }

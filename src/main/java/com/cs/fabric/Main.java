@@ -1,7 +1,7 @@
 package com.cs.fabric;
 
 
-import com.cs.fabric.client.DeployPublicChaincode;
+import com.cs.fabric.client.DeployAtqChaincode;
 import com.cs.fabric.client.InvokePublicChaincode;
 import com.cs.fabric.client.PublicChannel;
 import com.cs.fabric.client.SetupUsers;
@@ -71,7 +71,7 @@ public class Main {
         }
 
         String[] ctxArgs = {""};
-        String[] emptyArgs = {};
+        String[] privateArgs = {""};
         logger.info("main is started");
 
         if (args[0].equals("create_users") || args[0].equals("init")) {
@@ -89,32 +89,55 @@ public class Main {
             chan.main(ctxArgs);
         }
 
-        if (args[0].equals("deploy_chaincode") || args[0].equals("init")) {
-            logger.info("deploy of public cc version " + ClientHelper.CHAIN_CODE_VERSION);
-            DeployPublicChaincode publicChaincode = new DeployPublicChaincode();
-            publicChaincode.main(ctxArgs);
+        if (args[0].equals("deploy_public") || args[0].equals("init")) {
+            logger.info("deploy of public cc ");
+            privateArgs[0] = "public";
+            DeployAtqChaincode deployChaincode = new DeployAtqChaincode();
+            deployChaincode.main(privateArgs);
 
         }
 
+        /*
+        if (args[0].equals("deploy_art") || args[0].equals("init")) {
+            logger.info("deploy of art cc ");
+            privateArgs[0] = "art";
+            DeployAtqChaincode deployChaincode = new DeployAtqChaincode();
+            deployChaincode.main(privateArgs);
+        }
+        */
 
         if (args[0].equals("server")) {
             startServer(args);
         }
 
         if (args[0].equals("invoke") || args[0].equals("read")) {
-            logger.info("invoking chaincode : " + args[0]);
+            logger.info("chaincode : " + args[1] + " mode : " + args[0]);
 
             if (args[0].equals("invoke")) {
-                //   0       1       2			  3             4              5         6    7
-                //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-                ctxArgs = new String[]{"initAnimal", "124000100005", "3", "Longueuil",
-                        "kitchen", "SlaughterHouse", "2017-09-28"};
+                if("art_cc".equals(args[1])) {
+                    ctxArgs = new String[]{"art", "iPostUser", "200", "USER", "TRD", "Longueuil",
+                            "kitchen", "SlaughterHouse", "2017-09-28"};
+
+                }
+                else {
+                    //   0       1       2			  3             4              5         6    7
+                    //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
+                    ctxArgs = new String[]{"public", "initAnimal", args[2], "3", "Longueuil",
+                            "kitchen", "SlaughterHouse", "2017-09-28"};
+                }
             } else {
-                //   0       1       2			  3             4              5         6    7
-                //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-                ctxArgs = new String[]{"readAnimal", "124000100005"};
+                if("art_cc".equals(args[1])) {
+                    ctxArgs = new String[]{"art", "GetUser", "100"};
+
+                }
+                else{
+                    //   0       1       2			  3             4              5         6    7
+                    //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
+                    ctxArgs = new String[]{"public", "readAnimal", "124000100005"};
+                }
 
             }
+        }
 
             InvokePublicChaincode icc = new InvokePublicChaincode();
             icc.main(ctxArgs);
@@ -122,6 +145,6 @@ public class Main {
         }
 
 
-    }
+
 }
 

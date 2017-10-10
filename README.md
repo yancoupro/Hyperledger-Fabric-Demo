@@ -22,6 +22,7 @@ OR
 cd /home/devops2/java/atiServer/queblock/external/yancoupro-Fabric-Demo-Base/src/test/fixture/sdkintegration;
 
 docker-compose -f docker-compose.yaml up
+#you can skip tests if you want : mvn clean install -Dmaven.test.skip=true
 mvn clean install;
 mvnDebug exec:java -X -Dexec.args="read"
 from IDE click debug

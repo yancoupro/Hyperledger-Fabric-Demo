@@ -38,9 +38,12 @@ public class ClientHelper {
 	//private static final String CHAIN_CO/DE_NAME = "trade_finance_go";
 	//private static final String CHAIN_CODE_PATH = "github.com/trade_finance";
 	private static final String FOO_CHANNEL_NAME = "public";
-	private static final String CHAIN_CODE_NAME = "public_chaincode";
-	private static final String CHAIN_CODE_PATH = "queblock/public_chaincode";
-	public static final String CHAIN_CODE_VERSION = "9";
+	private static final String PUB_CC_NAME = "public_chaincode";
+	private static final String PUB_CC_PATH = "queblock/public_chaincode";
+	public static final String PUB_CC_VERSION = "4";
+	private static final String ART_CC_NAME = "art_chaincode";
+	private static final String ART_CC_PATH = "github.com/hyperledger/fabric/auction/art/artchaincode/";
+	public static final String ART_CC_VERSION = "3";
 	private static final ClientConfig clientConfig = ClientConfig.getConfig();
 
 	private static final Log logger = LogFactory.getLog(ClientHelper.class);
@@ -195,8 +198,17 @@ public class ClientHelper {
 		return channel;
 	}
 
-	public ChaincodeID getChaincodeID() {
-		return ChaincodeID.newBuilder().setName(CHAIN_CODE_NAME).setVersion(CHAIN_CODE_VERSION).setPath(CHAIN_CODE_PATH)
-				.build();
+	public ChaincodeID getChaincodeID(String chainCodeIndex) {
+	    ChaincodeID cc ;
+	    if(chainCodeIndex.equals("art")) {
+			cc = ChaincodeID.newBuilder().setName(ART_CC_NAME).setVersion(ART_CC_VERSION).setPath(ART_CC_PATH)
+					.build();
+		}
+		else {
+			cc = ChaincodeID.newBuilder().setName(PUB_CC_NAME).setVersion(PUB_CC_VERSION).setPath(PUB_CC_PATH)
+					.build();
+		}
+
+		return cc;
 	}
 }

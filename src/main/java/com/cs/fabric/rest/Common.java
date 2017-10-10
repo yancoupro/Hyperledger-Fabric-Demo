@@ -21,32 +21,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-//import org.hyperledger.fabric.protos.common.Common;
-//import org.hyperledger.fabric.protos.orderer.Ab;
-//import org.hyperledger.fabric.protos.orderer.Ab.DeliverResponse;
-//import org.hyperledger.fabric.protos.orderer.AtomicBroadcastGrpc;
-//import org.hyperledger.fabric.sdk.exception.TransactionException;
-//import org.hyperledger.fabric.sdk.helper.Config;
+public class Common {
 
-/**
- * Root resource (exposed at "contract" path)
- */
-@Path("/user")
-public class User {
+    protected Response getFromCC(String[] ctxArgs) throws InvalidArgumentException {
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
-     */
-    @GET
-    @Path("{identifier}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getIt(@PathParam("identifier") String identifier) throws InvalidArgumentException {
-
-        //TODO [yc] apply to user
-        String[] ctxArgs = new String[]{"readAnimal", identifier};
         String txResult = "";
 
         InvokePublicChaincode icc = new InvokePublicChaincode();
@@ -68,64 +46,9 @@ public class User {
         return Response.status(200).entity(txResult).build();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String setIt(final MultivaluedMap<String, String> map) throws InvalidArgumentException {
-        StringBuilder s = new StringBuilder();
-        s.append("SET IT INITIATED");
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date today = Calendar.getInstance().getTime();
-        String creationDate = df.format(today);
-
-        // ./peer chaincode invoke -l golang -n mycc -c '{"Function": "PostUser",
-// "Args":[
-//0 "100",
-//1 "USER",
-//2 "Ashley Hart",
-//3 "TRD",
-//4 "Morrisville Parkway,  #216,  Morrisville,  NC 27560",
-// "9198063535",
-// "ashley@itpeople.com",
-// "SUNTRUST",
-// "00017102345",
-//9 "0234678"]}'
-
-        String[] ctxArgs = new String[]{"art", "iPostUser",
-                map.getFirst("userId"),
-                map.getFirst("objectType"),
-                map.getFirst("role"),
-                map.getFirst("address"),
-                map.getFirst("phone"),
-                map.getFirst("email"),
-                map.getFirst("phone"),
-                map.getFirst("bank"),
-                map.getFirst("account"),
-                map.getFirst("routing"),
-                creationDate
-        };
+    protected String setToCC(String[] ctxArgs) throws InvalidArgumentException {
 
         Main.logger.info("args to cc" + Arrays.toString(ctxArgs));
-        try {
-
-            Main.logger.info("POST Parameters:");
-
-
-//            MultivaluedMap<String, String> map = ui.get();
-
-            for (String key : map.keySet()) {
-                Main.logger.info("Key: " + key);
-                Main.logger.info("Val: " + map.getFirst(key));
-                s.append("Key: " + key);
-                s.append("Val: " + map.getFirst(key));
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build().toString();
-        }
         String txResult = "";
 
         InvokePublicChaincode icc = new InvokePublicChaincode();
@@ -144,6 +67,17 @@ public class User {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "Got it!" + "xx" + "\n" + txResult;
+        return "SET it!" + "xx" + "\n" + txResult;
+    }
+
+    protected void logPost(final MultivaluedMap<String, String> map) throws InvalidArgumentException {
+
+            Main.logger.info("POST Parameters:");
+
+            for (String key : map.keySet()) {
+                Main.logger.info("Key: " + key);
+                Main.logger.info("Val: " + map.getFirst(key));
+            }
+
     }
 }

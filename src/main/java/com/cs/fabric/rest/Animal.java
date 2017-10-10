@@ -27,7 +27,7 @@ import java.util.Enumeration;
  * Root resource (exposed at "contract" path)
  */
 @Path("/animal")
-public class Animal {
+public class Animal extends Common{
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -40,26 +40,8 @@ public class Animal {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIt(@PathParam("identifier") String identifier) throws InvalidArgumentException {
 
-        String[] ctxArgs = new String[]{"readAnimal", identifier};
-        String txResult = "";
-
-        InvokePublicChaincode icc = new InvokePublicChaincode();
-        try {
-            txResult = icc.main(ctxArgs);
-        } catch (CryptoException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (TransactionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Response.status(200).entity(txResult).build();
+        String[] ctxArgs = new String[]{"public", "readAnimal", identifier};
+        return this.getFromCC(ctxArgs);
     }
 
     @POST
@@ -71,7 +53,7 @@ public class Animal {
 
         //   0       1       2			  3             4              5         6    7
         //   ID      Age    Birth Place  Feeding Place Slaughter Place Slaughter Date Certifications
-        String[] ctxArgs = new String[]{"initAnimal",
+        String[] ctxArgs = new String[]{"public", "initAnimal",
                 map.getFirst("animalId"),
                 map.getFirst("ageInMonths"),
                 map.getFirst("placeOfBirth"),
@@ -80,44 +62,14 @@ public class Animal {
                 map.getFirst("DateOfSlaughter")
         };
 
-        Main.logger.info("args to cc" + Arrays.toString(ctxArgs));
         try {
 
-            Main.logger.info("POST Parameters:");
-
-
-//            MultivaluedMap<String, String> map = ui.get();
-
-            for (String key : map.keySet()) {
-                Main.logger.info("Key: " + key);
-                Main.logger.info("Val: " + map.getFirst(key));
-                s.append("Key: " + key);
-                s.append("Val: " + map.getFirst(key));
-
-            }
+            this.logPost(map);
 
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build().toString();
         }
-        String txResult = "";
-
-        InvokePublicChaincode icc = new InvokePublicChaincode();
-        try {
-            txResult = icc.main(ctxArgs);
-        } catch (CryptoException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (TransactionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Got it!" + "xx" + "\n" + txResult;
+        return "child it!" + "\n" + this.setToCC(ctxArgs);
     }
 }

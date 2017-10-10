@@ -41,7 +41,7 @@ public class ATQChainCode {
 		this.args = args;
 		this.client = clientHelper.getHFClient();
 		this.channel = clientHelper.getChannel();
-		this.chaincodeID = clientHelper.getChaincodeID();
+		this.chaincodeID = clientHelper.getChaincodeID(args[0]);
 		SampleOrg sampleOrg = clientHelper.getSamleOrg();
 		//this.client.setUserContext(sampleOrg.getUser(TESTUSER_1_NAME));
 		this.client.setUserContext(sampleOrg.getPeerAdmin()); // Maybe a bug of 1.0.0beta, only peer admin can call chaincode?
@@ -64,8 +64,10 @@ public class ATQChainCode {
 
         //get first arg as fn and pass the others as args.
         List<String> argsList = new LinkedList<String>(Arrays.asList(args));
-        String fn = argsList.get(0);
+        logger.info("incoming : " + Arrays.toString(args));
+        //cc name
         argsList.remove(0);
+		String fn = argsList.remove(0);
 
         String[] argsOnly = argsList.toArray(new String[argsList.size()]);
 
@@ -84,7 +86,7 @@ public class ATQChainCode {
 		transactionProposalRequest.setTransientMap(tm2);
 
 		logger.info(
-				"sending transactionProposal to all peers ");
+				"sending transactionProposal to all peers (fn : "+ fn +") args : "+Arrays.toString(argsOnly));
 
 		Collection<ProposalResponse> transactionPropResp = channel.sendTransactionProposal(transactionProposalRequest,
 				channel.getPeers());

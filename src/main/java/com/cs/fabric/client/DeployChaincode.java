@@ -49,7 +49,7 @@ public class DeployChaincode {
 		Channel channel = clientHelper.getChannel();
 		logger.info("Get Channel " + FOO_CHANNEL_NAME);
 
-		final ChaincodeID chaincodeID = clientHelper.getChaincodeID();
+		final ChaincodeID chaincodeID = clientHelper.getChaincodeID("TBD");
 		Collection<ProposalResponse> responses;
 		Collection<ProposalResponse> successful = new LinkedList<>();
 		Collection<ProposalResponse> failed = new LinkedList<>();
