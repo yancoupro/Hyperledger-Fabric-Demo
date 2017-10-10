@@ -62,7 +62,6 @@ services:
 #      - CORE_PEER_GOSSIP_ORGLEADER=true
       - CORE_PEER_LOCALMSPID=Org1MSP
     volumes:
-      - /home/devops2/go:/opt/gopath
       - /var/run/:/host/var/run/
       - ./e2e-2Orgs/channel/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peer:ro
     ports:
@@ -83,7 +82,6 @@ services:
 #      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
     volumes:
-         - /home/devops2/go:/opt/gopath
          - /var/run/:/host/var/run/
          - ./e2e-2Orgs/channel/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/:/etc/hyperledger/msp/peer:ro
     ports:
@@ -105,7 +103,6 @@ services:
 #      - CORE_PEER_GOSSIP_ORGLEADER=true
       - CORE_PEER_LOCALMSPID=Org2MSP
     volumes:
-      - /home/devops2/go:/opt/gopath
       - /var/run/:/host/var/run/
       - ./e2e-2Orgs/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/msp/peer:ro
     ports:
@@ -126,7 +123,6 @@ services:
 #      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:8051
       - CORE_PEER_LOCALMSPID=Org2MSP
     volumes:
-         - /home/devops2/go:/opt/gopath
          - /var/run/:/host/var/run/
          - ./e2e-2Orgs/channel/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/:/etc/hyperledger/msp/peer:ro
     ports:

@@ -1,0 +1,11 @@
+echo "\
+\
+"
+echo "CORE_PEER_MSPCONFIGPATH              $CORE_PEER_MSPCONFIGPATH"
+echo "CORE_PEER_ADDRESS                    $CORE_PEER_ADDRESS"
+echo "CORE_PEER_LOCALMSPID                 $CORE_PEER_LOCALMSPID"
+echo "CORE_PEER_TLS_ROOTCERT_FILE          $CORE_PEER_TLS_ROOTCERT_FILE"
+
+echo "\
+\
+"

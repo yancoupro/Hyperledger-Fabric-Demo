@@ -35,7 +35,7 @@ public class DeployPublicChaincode {
 		Channel channel = clientHelper.getChannel();
 		logger.info("Get Channel " + FOO_CHANNEL_NAME);
 
-		final ChaincodeID chaincodeID = clientHelper.getChaincodeID();
+		final ChaincodeID chaincodeID = clientHelper.getChaincodeID(args[0]);
 		Collection<ProposalResponse> responses;
 		Collection<ProposalResponse> successful = new LinkedList<>();
 		Collection<ProposalResponse> failed = new LinkedList<>();
@@ -58,7 +58,7 @@ public class DeployPublicChaincode {
 		//// mostly likely the users GOPATH
 		installProposalRequest
 				.setChaincodeSourceLocation(new File(TEST_FIXTURES_PATH + "/sdkintegration/gocc/golocal"));
-		installProposalRequest.setChaincodeVersion(ClientHelper.CHAIN_CODE_VERSION);
+		installProposalRequest.setChaincodeVersion(chaincodeID.getVersion());
 
 		logger.info("Sending install proposal");
 		////////////////////////////

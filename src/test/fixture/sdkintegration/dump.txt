@@ -1,0 +1,19 @@
+// GetCreator returns marshaled serialized identity of the client
+    serializedID, _ := stub.GetCreator()
+
+    sId := &msp.SerializedIdentity{}
+    err := proto.Unmarshal(serializedID, sId)
+    if err != nil {
+        return shim.Error(fmt.Sprintf("Could not deserialize a SerializedIdentity, err %s", err))
+    }
+
+    bl, _ := pem.Decode(sId.IdBytes)
+    if bl == nil {
+        return shim.Error(fmt.Sprintf("Failed to decode PEM structure"))
+    }
+    cert, err := x509.ParseCertificate(bl.Bytes)
+    if err != nil {
+        return shim.Error(fmt.Sprintf("Unable to parse certificate %s", err))
+    }
+
+    // Do whatever you need with certificate
